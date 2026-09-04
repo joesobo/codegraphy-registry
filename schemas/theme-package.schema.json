@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/joesobo/codegraphy-registry/main/schemas/theme-package.schema.json",
+  "title": "CodeGraphy theme package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest", "css"],
+  "properties": {
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "formatVersion",
+        "kind",
+        "id",
+        "name",
+        "version",
+        "minimumCodeGraphyVersion",
+        "description",
+        "author",
+        "repository",
+        "license",
+        "keywords",
+        "modes",
+        "preview"
+      ],
+      "properties": {
+        "formatVersion": { "const": 1 },
+        "kind": { "const": "theme" },
+        "id": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "^[a-z0-9-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "version": { "$ref": "#/$defs/version" },
+        "minimumCodeGraphyVersion": { "$ref": "#/$defs/version" },
+        "description": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "author": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "repository": { "type": "string", "minLength": 9, "maxLength": 500, "pattern": "^https://" },
+        "license": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "keywords": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 40, "pattern": "^[a-z0-9-]+$" }
+        },
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": { "enum": ["light", "dark"] }
+        },
+        "preview": {
+          "type": "string",
+          "maxLength": 2097152,
+          "pattern": "^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=\\s]+$"
+        }
+      }
+    },
+    "css": { "type": "string", "maxLength": 4194304 }
+  },
+  "$defs": {
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+  }
+}

@@ -1,0 +1,34 @@
+:root[data-color-scheme="dark"] {
+  --canvas: #21222c;
+  --surface: #282a36;
+  --surface-raised: #343746;
+  --surface-muted: #21222c;
+  --border: #44475a;
+  --border-strong: #8994bd;
+  --text: #f8f8f2;
+  --text-muted: #b8bdd4;
+  --text-faint: #8994bd;
+  --accent: #bd93f9;
+  --accent-foreground: #282a36;
+  --accent-strong: #bd93f9;
+  --accent-surface: #343746;
+  --selection: #343746;
+  --warning: #f1fa8c;
+  --warning-foreground: #f1fa8c;
+  --danger: #ff5555;
+  --danger-foreground: #ff5555;
+  --focus: #bd93f9;
+  --graph-background: #191a21;
+  --graph-edge: #8994bd;
+  --graph-grid: #343746;
+  --syntax-keyword: #bd93f9;
+  --syntax-name: #f8f8f2;
+  --syntax-function: #8be9fd;
+  --syntax-constant: #ffb86c;
+  --syntax-definition: #8be9fd;
+  --syntax-type: #f1fa8c;
+  --syntax-tag: #ff5555;
+  --syntax-special: #ff79c6;
+  --syntax-string: #50fa7b;
+  --syntax-comment: #8994bd;
+}

@@ -1,0 +1,22 @@
+{
+  "formatVersion": 1,
+  "kind": "theme",
+  "id": "atom",
+  "name": "Atom",
+  "version": "1.2.0",
+  "description": "Atom One Light and One Dark colors, adapted for CodeGraphy. Maintained by CodeGraphy.",
+  "author": "CodeGraphy",
+  "modes": [
+    "light",
+    "dark"
+  ],
+  "preview": "preview.png",
+  "minimumCodeGraphyVersion": "0.1.9",
+  "repository": "https://github.com/joesobo/codegraphy-registry/tree/main/themes/atom",
+  "license": "MIT",
+  "keywords": [
+    "atom",
+    "one-dark",
+    "one-light"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "formatVersion": 1,
+  "kind": "theme",
+  "id": "catppuccin",
+  "name": "Catppuccin",
+  "version": "1.2.0",
+  "description": "Pastel colors for your workspace. Latte in light mode and Mocha in dark mode. Maintained by CodeGraphy using the Catppuccin palette.",
+  "author": "CodeGraphy",
+  "modes": [
+    "light",
+    "dark"
+  ],
+  "preview": "preview.png",
+  "minimumCodeGraphyVersion": "0.1.9",
+  "repository": "https://github.com/joesobo/codegraphy-registry/tree/main/themes/catppuccin",
+  "license": "MIT",
+  "keywords": [
+    "catppuccin",
+    "pastel",
+    "latte",
+    "mocha"
+  ]
+}

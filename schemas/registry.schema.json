@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/joesobo/codegraphy-registry/main/schemas/registry.schema.json",
+  "title": "CodeGraphy extension registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["formatVersion", "extensions"],
+  "properties": {
+    "formatVersion": { "const": 1 },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "id", "releaseUrl"],
+        "properties": {
+          "kind": { "type": "string" },
+          "id": { "type": "string", "minLength": 1, "maxLength": 80, "pattern": "^[a-z0-9-]+$" },
+          "releaseUrl": { "type": "string", "pattern": "^https://" }
+        }
+      }
+    }
+  }
+}

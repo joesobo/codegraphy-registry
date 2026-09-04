@@ -1,0 +1,16 @@
+{
+  "$schema": "https://raw.githubusercontent.com/joesobo/codegraphy-registry/main/schemas/theme-source.schema.json",
+  "formatVersion": 1,
+  "kind": "theme",
+  "id": "your-theme",
+  "name": "Your Theme",
+  "version": "1.0.0",
+  "minimumCodeGraphyVersion": "0.1.9",
+  "description": "Describe the colors, visual style, and supported use cases.",
+  "author": "Your name",
+  "repository": "https://github.com/your-name/your-theme",
+  "license": "MIT",
+  "keywords": ["light", "dark"],
+  "modes": ["light", "dark"],
+  "preview": "preview.png"
+}

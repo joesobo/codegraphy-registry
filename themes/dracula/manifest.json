@@ -1,0 +1,21 @@
+{
+  "formatVersion": 1,
+  "kind": "theme",
+  "id": "dracula",
+  "name": "Classic Dracula",
+  "version": "1.2.0",
+  "description": "The classic dark Dracula palette with purple accents and bright syntax colors. Maintained by CodeGraphy.",
+  "author": "CodeGraphy",
+  "modes": [
+    "dark"
+  ],
+  "preview": "preview.png",
+  "minimumCodeGraphyVersion": "0.1.9",
+  "repository": "https://github.com/joesobo/codegraphy-registry/tree/main/themes/dracula",
+  "license": "MIT",
+  "keywords": [
+    "dracula",
+    "dark",
+    "purple"
+  ]
+}

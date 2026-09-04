@@ -1,17 +1,54 @@
-# CodeGraphy registry
+# CodeGraphy theme registry
 
-This catalog lists optional CodeGraphy theme packages. CodeGraphy includes its default theme; additional themes download only when installed.
+This public registry lists optional CodeGraphy themes. CodeGraphy includes its default theme. It downloads another theme only when a user installs it, and installation does not activate the theme.
 
-`index.json` uses a versioned envelope with `formatVersion` and an `extensions` list. Each entry contains a manifest, immutable HTTPS package URL, and SHA-256 checksum. The manifest's `kind` identifies the contribution. Current entries use `theme`; clients ignore kinds they do not support. Installation and activation are separate. Versioned packages are attached to this repository's releases.
+Theme authors keep source and releases in their own public repository. The registry records one stable release-metadata URL for each theme. An author changes that metadata when they publish a new immutable package, so updates do not require a CodeGraphy application change or another registry pull request.
 
-## Theme format
+## Create a theme
 
-A package contains manifest and css fields. The manifest declares formatVersion (1), kind (theme), id, name, version, description, author, modes, and preview. IDs use lowercase letters, digits, and hyphens. Versions use three numbers. Modes contain light, dark, or both. Preview images are embedded PNG, JPEG, or WebP data URLs.
+1. Copy `template/` into a public repository that you own.
+2. Complete `manifest.json`, add an actual app screenshot as `preview.png`, and write `theme.css`. The [styling contract](docs/styling.md) lists stable tokens and hooks.
+3. Clone this registry and install its public build tool with `bun install --frozen-lockfile`.
+4. Build your package. Predict the immutable release-asset URL before you upload it:
 
-CSS targets :root[data-color-scheme="light"] and :root[data-color-scheme="dark"]. Use shared variables such as --canvas, --surface, --text, --accent, --font-ui, --font-text, and --font-mono. Personal appearance preferences and enabled snippets follow the selected theme under normal CSS cascade rules.
+   ```sh
+   bun run theme:build ../your-theme \
+     --output ../your-theme/dist \
+     --package-url https://github.com/you/your-theme/releases/download/1.0.0/your-theme-1.0.0.codegraphy-extension.json \
+     --release-notes-file ../your-theme/release-notes.md \
+     --release-file ../your-theme/codegraphy-release.json
+   ```
 
-Packages contain CSS only. Embed fonts and image assets as data URLs; network imports are not supported. Package size is limited to 8 MiB, CSS to 4 MiB, and previews to 2 MiB. Executable plugins are not part of format version 1.
+5. Create a GitHub release whose tag matches the manifest version. Upload the generated `.codegraphy-extension.json` file without changing its bytes.
+6. Commit `codegraphy-release.json` to a stable path on your default branch.
+7. Open one registry pull request that adds your theme ID and the raw HTTPS URL for `codegraphy-release.json` to `index.json`.
 
-## Contribute
+The initial registry pull request is the directory review boundary. Later updates only require a new version, an immutable release asset, and a regenerated `codegraphy-release.json` in your repository.
 
-Open a pull request with package metadata, a versioned HTTPS download, its checksum, and license information. Do not replace published package bytes; publish a new version. Maintained themes should retain readable contrast, visible keyboard focus, and reduced-motion support.
+## Source manifest
+
+`manifest.json` uses [schemas/theme-source.schema.json](schemas/theme-source.schema.json). Its required metadata includes:
+
+- `version`: the theme release in `x.y.z` form.
+- `minimumCodeGraphyVersion`: the oldest compatible CodeGraphy release in `x.y.z` form. CodeGraphy blocks installation on older versions.
+- `description`, `author`, `repository`, `license`, and `keywords`: details shown or used by the theme directory.
+- `modes`: `light`, `dark`, or both.
+- `preview`: a PNG, JPEG, or WebP filename in the source directory. The builder requires this creator-provided file and embeds it in the package. It does not create or substitute preview artwork.
+
+IDs and keywords use lowercase letters, digits, and hyphens. Each source repository must include its license text. A package contains the validated manifest and CSS only; it has no executable code.
+
+## CSS and assets
+
+Write ordinary CSS without a cascade-layer wrapper. Use `:root[data-color-scheme="light"]` and `:root[data-color-scheme="dark"]` for mode-specific values. Personal font, accent, and text-size choices apply after the theme. Enabled CSS snippets apply after personal choices in saved order.
+
+CSS may change any app layout or hide content. CodeGraphy does not enforce design quality. Imports and remote resource URLs are rejected. Embed image and font resources as base64 data URLs so the package remains self-contained and works offline.
+
+The complete package is limited to 8 MiB, CSS to 4 MiB, and the embedded preview data URL to 2 MiB. Maintained themes should keep text readable, keyboard focus visible, enlarged text usable, and reduced-motion behavior available.
+
+## Registry and updates
+
+`index.json` uses [schemas/registry.schema.json](schemas/registry.schema.json). A theme reference contains `kind`, `id`, and `releaseUrl`. CodeGraphy fetches that stable URL to get the current [release metadata](schemas/theme-release.schema.json), then verifies the downloaded package SHA-256 and manifest identity before installation.
+
+Never replace a published package asset. Increase the manifest version, publish a new asset, and regenerate release metadata. CodeGraphy offers an update only when the catalog version is newer and the current app satisfies `minimumCodeGraphyVersion`.
+
+The package and catalog envelope reserve no executable plugin behavior.
