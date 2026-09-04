@@ -28,7 +28,7 @@ interface SourceManifest {
   keywords: string[];
   modes: ("light" | "dark")[];
   settings: ThemeSetting[];
-  preview: string;
+  previews: Partial<Record<"light" | "dark", string>>;
 }
 
 type ThemeSetting = {
@@ -43,8 +43,8 @@ type ThemeSetting = {
   step?: number;
 };
 
-interface PackageManifest extends Omit<SourceManifest, "$schema" | "preview"> {
-  preview: string;
+interface PackageManifest extends Omit<SourceManifest, "$schema" | "previews"> {
+  previews: Partial<Record<"light" | "dark", string>>;
 }
 type PreviewMediaType = "image/png" | "image/jpeg" | "image/webp";
 
@@ -103,6 +103,32 @@ function validateThemeSettings(settings: ThemeSetting[]): void {
   }
 }
 
+async function embeddedPreview(directory: string, filename: string): Promise<string> {
+  if (basename(filename) !== filename)
+    throw new Error("Theme previews must name images in the theme source directory");
+  const previewPath = join(directory, filename);
+  const previewInfo = await stat(previewPath);
+  if (!previewInfo.isFile() || previewInfo.size === 0 || previewInfo.size > 1_500_000)
+    throw new Error("Each theme preview must be a non-empty file below 1.5 MB");
+  const mediaType = new Map<string, PreviewMediaType>([
+    [".png", "image/png"],
+    [".jpg", "image/jpeg"],
+    [".jpeg", "image/jpeg"],
+    [".webp", "image/webp"],
+  ]).get(extname(filename).toLowerCase());
+  if (!mediaType) throw new Error("Theme previews must be PNG, JPEG, or WebP images");
+  const previewBytes = await readFile(previewPath);
+  const signatures = {
+    "image/png": previewBytes.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex")),
+    "image/jpeg": previewBytes.subarray(0, 3).equals(Buffer.from("ffd8ff", "hex")),
+    "image/webp":
+      previewBytes.subarray(0, 4).toString("ascii") === "RIFF" &&
+      previewBytes.subarray(8, 12).toString("ascii") === "WEBP",
+  };
+  if (!signatures[mediaType]) throw new Error(`Theme preview is not a valid ${mediaType} file`);
+  return `data:${mediaType};base64,${previewBytes.toString("base64")}`;
+}
+
 export async function buildTheme(
   sourceDirectory: string,
   options: ThemeBuildOptions,
@@ -117,29 +143,17 @@ export async function buildTheme(
   assertValid(validateSource, source, "Theme source manifest");
   httpsUrl(source.repository, "Theme repository");
   validateThemeSettings(source.settings);
-  if (basename(source.preview) !== source.preview)
-    throw new Error("Theme preview must name an image in the theme source directory");
-
-  const previewPath = join(directory, source.preview);
-  const previewInfo = await stat(previewPath);
-  if (!previewInfo.isFile() || previewInfo.size === 0 || previewInfo.size > 1_500_000)
-    throw new Error("Theme preview must be a non-empty file below 1.5 MB");
-  const mediaType = new Map<string, PreviewMediaType>([
-    [".png", "image/png"],
-    [".jpg", "image/jpeg"],
-    [".jpeg", "image/jpeg"],
-    [".webp", "image/webp"],
-  ]).get(extname(source.preview).toLowerCase());
-  if (!mediaType) throw new Error("Theme preview must be a PNG, JPEG, or WebP image");
-  const previewBytes = await readFile(previewPath);
-  const signatures = {
-    "image/png": previewBytes.subarray(0, 8).equals(Buffer.from("89504e470d0a1a0a", "hex")),
-    "image/jpeg": previewBytes.subarray(0, 3).equals(Buffer.from("ffd8ff", "hex")),
-    "image/webp":
-      previewBytes.subarray(0, 4).toString("ascii") === "RIFF" &&
-      previewBytes.subarray(8, 12).toString("ascii") === "WEBP",
-  };
-  if (!signatures[mediaType]) throw new Error(`Theme preview is not a valid ${mediaType} file`);
+  const previewModes = Object.keys(source.previews).sort();
+  if (
+    previewModes.length !== source.modes.length ||
+    ![...source.modes].sort().every((mode, index) => mode === previewModes[index])
+  )
+    throw new Error("Theme previews must match the declared light and dark modes");
+  const previews = Object.fromEntries(
+    await Promise.all(
+      source.modes.map(async (mode) => [mode, await embeddedPreview(directory, source.previews[mode]!)]),
+    ),
+  );
 
   const license = await stat(join(directory, "LICENSE"));
   if (!license.isFile() || license.size === 0)
@@ -148,10 +162,10 @@ export async function buildTheme(
   const css = await readFile(join(directory, "theme.css"), "utf8");
   if (Buffer.byteLength(css) > 4 * 1024 * 1024) throw new Error("Theme CSS exceeds 4 MiB");
   validateThemeCss(css);
-  const { $schema: _schema, preview: _preview, ...metadata } = source;
+  const { $schema: _schema, previews: _previews, ...metadata } = source;
   const manifest: PackageManifest = {
     ...metadata,
-    preview: `data:${mediaType};base64,${previewBytes.toString("base64")}`,
+    previews,
   };
   const packageValue = { manifest, css };
   assertValid(validatePackage, packageValue, "Theme package");

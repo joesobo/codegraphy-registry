@@ -23,7 +23,7 @@
         "keywords",
         "modes",
         "settings",
-        "preview"
+        "previews"
       ],
       "properties": {
         "formatVersion": { "const": 1 },
@@ -55,16 +55,25 @@
           "maxItems": 50,
           "items": { "$ref": "theme-setting.schema.json" }
         },
-        "preview": {
-          "type": "string",
-          "maxLength": 2097152,
-          "pattern": "^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=\\s]+$"
+        "previews": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "light": { "$ref": "#/$defs/previewData" },
+            "dark": { "$ref": "#/$defs/previewData" }
+          }
         }
       }
     },
     "css": { "type": "string", "maxLength": 4194304 }
   },
   "$defs": {
-    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "previewData": {
+      "type": "string",
+      "maxLength": 2097152,
+      "pattern": "^data:image/(png|jpeg|webp);base64,[A-Za-z0-9+/=\\s]+$"
+    }
   }
 }

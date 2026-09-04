@@ -10,7 +10,6 @@
     "light",
     "dark"
   ],
-  "preview": "preview.png",
   "minimumCodeGraphyVersion": "0.1.9",
   "repository": "https://github.com/joesobo/codegraphy-registry/tree/main/themes/atom",
   "license": "MIT",
@@ -19,5 +18,9 @@
     "one-dark",
     "one-light"
   ],
-  "settings": []
+  "settings": [],
+  "previews": {
+    "light": "preview-light.png",
+    "dark": "preview-dark.png"
+  }
 }

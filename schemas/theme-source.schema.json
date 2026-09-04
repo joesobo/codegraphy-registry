@@ -18,7 +18,7 @@
     "keywords",
     "modes",
     "settings",
-    "preview"
+    "previews"
   ],
   "properties": {
     "$schema": { "type": "string", "pattern": "^https://" },
@@ -51,9 +51,18 @@
       "maxItems": 50,
       "items": { "$ref": "theme-setting.schema.json" }
     },
-    "preview": { "type": "string", "pattern": "^[^/\\\\]+\\.(png|jpe?g|webp)$" }
+    "previews": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "light": { "$ref": "#/$defs/previewFile" },
+        "dark": { "$ref": "#/$defs/previewFile" }
+      }
+    }
   },
   "$defs": {
-    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "previewFile": { "type": "string", "pattern": "^[^/\\\\]+\\.(png|jpe?g|webp)$" }
   }
 }

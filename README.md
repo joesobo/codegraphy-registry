@@ -7,7 +7,7 @@ Theme authors keep source and releases in their own public repository. The regis
 ## Create a theme
 
 1. Copy `template/` into a public repository that you own.
-2. Complete `manifest.json`, add an actual app screenshot as `preview.png`, and write `theme.css`. The [styling contract](docs/styling.md) lists stable tokens and hooks.
+2. Complete `manifest.json`, add an actual app screenshot for each supported color mode, and write `theme.css`. The [styling contract](docs/styling.md) lists stable tokens and hooks.
 3. Clone this registry and install its public build tool with `bun install --frozen-lockfile`.
 4. Build your package. Predict the immutable release-asset URL before you upload it:
 
@@ -34,7 +34,7 @@ The initial registry pull request is the directory review boundary. Later update
 - `description`, `author`, `repository`, `license`, and `keywords`: details shown or used by the theme directory.
 - `modes`: `light`, `dark`, or both.
 - `settings`: optional theme-specific controls represented by a required array. Use an empty array when the theme has no controls.
-- `preview`: a PNG, JPEG, or WebP filename in the source directory. The builder requires this creator-provided file and embeds it in the package. It does not create or substitute preview artwork.
+- `previews`: a PNG, JPEG, or WebP filename for each declared color mode. The builder requires every creator-provided file and embeds it in the package. It does not create or substitute preview artwork.
 
 IDs and keywords use lowercase letters, digits, and hyphens. Each source repository must include its license text. A package contains the validated manifest and CSS only; it has no executable code.
 
@@ -55,7 +55,7 @@ Write ordinary CSS without a cascade-layer wrapper. Use `:root[data-color-scheme
 
 CSS may change any app layout or hide content. CodeGraphy does not enforce design quality. Imports and remote resource URLs are rejected. Embed image and font resources as base64 data URLs so the package remains self-contained and works offline.
 
-The complete package is limited to 8 MiB, CSS to 4 MiB, and the embedded preview data URL to 2 MiB. Maintained themes should keep text readable, keyboard focus visible, enlarged text usable, and reduced-motion behavior available.
+The complete package is limited to 8 MiB, CSS to 4 MiB, and each embedded preview data URL to 2 MiB. Maintained themes should keep text readable, keyboard focus visible, enlarged text usable, and reduced-motion behavior available.
 
 ## Registry and updates
 

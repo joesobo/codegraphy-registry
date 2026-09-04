@@ -25,10 +25,10 @@ async function fixture(): Promise<string> {
       keywords: ["sample"],
       modes: ["dark"],
       settings: [],
-      preview: "preview.png",
+      previews: { dark: "preview-dark.png" },
     }),
   );
-  await writeFile(join(directory, "preview.png"), Buffer.from("89504e470d0a1a0a", "hex"));
+  await writeFile(join(directory, "preview-dark.png"), Buffer.from("89504e470d0a1a0a", "hex"));
   await writeFile(join(directory, "LICENSE"), "MIT License\n");
   await writeFile(join(directory, "theme.css"), ":root { --canvas: #111; }\n");
   return directory;
@@ -49,7 +49,7 @@ describe("public theme builder", () => {
       releaseNotes: "Initial release.",
     });
     expect(result.filename).toBe("sample-1.0.0.codegraphy-extension.json");
-    expect(result.release?.manifest.preview).toStartWith("data:image/png;base64,");
+    expect(result.release?.manifest.previews.dark).toStartWith("data:image/png;base64,");
     expect(result.release?.sha256).toHaveLength(64);
   });
 

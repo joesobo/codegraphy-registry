@@ -9,7 +9,6 @@
   "modes": [
     "dark"
   ],
-  "preview": "preview.png",
   "minimumCodeGraphyVersion": "0.1.9",
   "repository": "https://github.com/joesobo/codegraphy-registry/tree/main/themes/dracula",
   "license": "MIT",
@@ -18,5 +17,8 @@
     "dark",
     "purple"
   ],
-  "settings": []
+  "settings": [],
+  "previews": {
+    "dark": "preview-dark.png"
+  }
 }

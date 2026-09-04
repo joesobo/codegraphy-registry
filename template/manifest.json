@@ -22,5 +22,8 @@
       "default": "#eeeef1"
     }
   ],
-  "preview": "preview.png"
+  "previews": {
+    "light": "preview-light.png",
+    "dark": "preview-dark.png"
+  }
 }
