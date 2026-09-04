@@ -10,16 +10,19 @@ For normal declarations, the Client declares these layers from lowest to highest
 | --- | --- |
 | `codegraphy.reset` | Element defaults and document sizing |
 | `codegraphy.pdfjs` | PDF.js page and text-layer defaults |
-| `codegraphy.theme.builtin` | Built-in theme values and semantic token defaults |
+| `codegraphy.builtin` | Built-in theme values and semantic token defaults |
 | `codegraphy.primitives` | Shared controls and focus behavior |
 | `codegraphy.features` | Workspace, explorer, editor, Markdown, Graph, and Settings surfaces |
 | `codegraphy.platform` | Responsive and mobile adaptation |
-| `codegraphy.theme.installed` | The active installed theme package |
+| `codegraphy.theme` | The active installed theme package |
+| `codegraphy.theme-settings` | Values from the active theme’s settings |
 | `codegraphy.plugin` | Reserved Plugin-owned structural styles |
 | `codegraphy.local` | Personal Settings followed by ordered CSS snippets |
 | `codegraphy.accessibility` | Built-in reduced-motion defaults |
 
 Keep each rule in its owner stylesheet. Put responsive rules beside the surface or subpart they adapt unless they coordinate the complete application shell. Do not create generic override or breakpoint files. Do not import Client styles from a Svelte module or depend on JavaScript import order.
+
+These layers are siblings inside `codegraphy`. Built-in defaults, installed themes, and theme settings must stay in separate sibling layers so component styles do not override installed theme rules.
 
 ## CodeMirror styles
 
