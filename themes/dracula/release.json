@@ -25,6 +25,5 @@
     }
   },
   "url": "https://github.com/joesobo/codegraphy-registry/releases/download/themes-v1.2.0/dracula-1.2.0.codegraphy-extension.json",
-  "sha256": "4bc88f964cb984e13eafd639c85693c1199453e117b10c82c0497675c77ae24a",
-  "releaseNotes": "Adds CodeGraphy theme package metadata and compatibility checks.\n"
+  "sha256": "4bc88f964cb984e13eafd639c85693c1199453e117b10c82c0497675c77ae24a"
 }

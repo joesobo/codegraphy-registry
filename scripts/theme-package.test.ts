@@ -46,7 +46,6 @@ describe("public theme builder", () => {
     const result = await buildTheme(directory, {
       outputDirectory: output,
       packageUrl: "https://example.com/releases/sample-1.0.0.codegraphy-extension.json",
-      releaseNotes: "Initial release.",
     });
     expect(result.filename).toBe("sample-1.0.0.codegraphy-extension.json");
     expect(result.release?.manifest.previews.dark).toStartWith("data:image/png;base64,");

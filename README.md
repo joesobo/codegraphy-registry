@@ -15,7 +15,6 @@ Theme authors keep source and releases in their own public repository. The regis
    bun run theme:build ../your-theme \
      --output ../your-theme/dist \
      --package-url https://github.com/you/your-theme/releases/download/1.0.0/your-theme-1.0.0.codegraphy-extension.json \
-     --release-notes-file ../your-theme/release-notes.md \
      --release-file ../your-theme/codegraphy-release.json
    ```
 

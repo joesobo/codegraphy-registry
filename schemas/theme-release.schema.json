@@ -4,12 +4,11 @@
   "title": "CodeGraphy theme release metadata",
   "type": "object",
   "additionalProperties": false,
-  "required": ["formatVersion", "manifest", "url", "sha256", "releaseNotes"],
+  "required": ["formatVersion", "manifest", "url", "sha256"],
   "properties": {
     "formatVersion": { "const": 1 },
     "manifest": { "$ref": "theme-package.schema.json#/properties/manifest" },
     "url": { "type": "string", "pattern": "^https://" },
-    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-    "releaseNotes": { "type": "string", "maxLength": 4000 }
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
   }
 }

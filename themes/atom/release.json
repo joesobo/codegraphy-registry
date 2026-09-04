@@ -36,6 +36,5 @@
     }
   },
   "url": "https://github.com/joesobo/codegraphy-registry/releases/download/themes-v1.2.0/atom-1.2.0.codegraphy-extension.json",
-  "sha256": "d4b499a070c0b465e7473e0fd59da80ce45cf6e9b22d5288da47dedfccea4265",
-  "releaseNotes": "Adds CodeGraphy theme package metadata and compatibility checks.\n"
+  "sha256": "d4b499a070c0b465e7473e0fd59da80ce45cf6e9b22d5288da47dedfccea4265"
 }

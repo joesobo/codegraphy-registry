@@ -53,13 +53,11 @@ export interface ThemeRelease {
   manifest: PackageManifest;
   url: string;
   sha256: string;
-  releaseNotes: string;
 }
 
 export interface ThemeBuildOptions {
   outputDirectory: string;
   packageUrl?: string;
-  releaseNotes?: string;
   releasePath?: string;
 }
 
@@ -189,7 +187,6 @@ export async function buildTheme(
     manifest,
     url: options.packageUrl,
     sha256: createHash("sha256").update(packageText).digest("hex"),
-    releaseNotes: options.releaseNotes ?? "",
   };
   assertValid(validateRelease, release, "Theme release metadata");
   if (options.releasePath) {
@@ -212,13 +209,11 @@ if (Bun.main === import.meta.path) {
   const sourceDirectory = arguments_[0];
   if (!sourceDirectory || sourceDirectory.startsWith("--"))
     throw new Error(
-      "Usage: bun run theme:build <theme-directory> [--output <directory>] [--package-url <https-url>] [--release-notes-file <file>] [--release-file <file>]",
+      "Usage: bun run theme:build <theme-directory> [--output <directory>] [--package-url <https-url>] [--release-file <file>]",
     );
-  const releaseNotesPath = option(arguments_, "--release-notes-file");
   const result = await buildTheme(sourceDirectory, {
     outputDirectory: option(arguments_, "--output") ?? join(sourceDirectory, "dist"),
     packageUrl: option(arguments_, "--package-url"),
-    releaseNotes: releaseNotesPath ? await readFile(resolve(releaseNotesPath), "utf8") : undefined,
     releasePath: option(arguments_, "--release-file"),
   });
   console.log(`Built ${result.filename}`);

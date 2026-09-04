@@ -14,7 +14,6 @@ for (const entry of (await readdir(themes, { withFileTypes: true })).sort((a, b)
   await buildTheme(directory, {
     outputDirectory: join(root, "dist"),
     packageUrl: `https://github.com/joesobo/codegraphy-registry/releases/download/themes-v${manifest.version}/${filename}`,
-    releaseNotes: await readFile(join(directory, "release-notes.md"), "utf8"),
     releasePath: join(directory, "release.json"),
   });
 }
