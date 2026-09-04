@@ -2,7 +2,7 @@
 
 This catalog lists optional CodeGraphy theme packages. CodeGraphy includes its default theme; additional themes download only when installed.
 
-Each entry in index.json contains a manifest, immutable HTTPS package URL, and SHA-256 checksum. Installation and activation are separate. Versioned packages are attached to this repository's releases.
+`index.json` uses a versioned envelope with `formatVersion` and an `extensions` list. Each entry contains a manifest, immutable HTTPS package URL, and SHA-256 checksum. The manifest's `kind` identifies the contribution. Current entries use `theme`; clients ignore kinds they do not support. Installation and activation are separate. Versioned packages are attached to this repository's releases.
 
 ## Theme format
 
