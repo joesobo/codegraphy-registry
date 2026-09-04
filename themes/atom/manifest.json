@@ -18,7 +18,16 @@
     "one-dark",
     "one-light"
   ],
-  "settings": [],
+  "settings": [
+    {
+      "type": "color",
+      "id": "accent-color",
+      "name": "Accent color",
+      "description": "Sets the Atom action, selection, and keyboard focus color.",
+      "cssVariable": "--atom-accent",
+      "default": "#528BFF"
+    }
+  ],
   "previews": {
     "light": "preview-light.png",
     "dark": "preview-dark.png"
