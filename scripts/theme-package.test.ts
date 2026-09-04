@@ -24,6 +24,7 @@ async function fixture(): Promise<string> {
       license: "MIT",
       keywords: ["sample"],
       modes: ["dark"],
+      settings: [],
       preview: "preview.png",
     }),
   );

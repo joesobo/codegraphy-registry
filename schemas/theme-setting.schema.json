@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/joesobo/codegraphy-registry/main/schemas/theme-setting.schema.json",
+  "title": "CodeGraphy theme setting",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id",
+        "name",
+        "description",
+        "cssVariable",
+        "default"
+      ],
+      "properties": {
+        "type": {
+          "const": "color"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "cssVariable": {
+          "$ref": "#/$defs/cssVariable"
+        },
+        "default": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id",
+        "name",
+        "description",
+        "cssVariable",
+        "default"
+      ],
+      "properties": {
+        "type": {
+          "const": "text"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "cssVariable": {
+          "$ref": "#/$defs/cssVariable"
+        },
+        "default": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id",
+        "name",
+        "description",
+        "cssVariable",
+        "default",
+        "min",
+        "max",
+        "step"
+      ],
+      "properties": {
+        "type": {
+          "const": "number"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "cssVariable": {
+          "$ref": "#/$defs/cssVariable"
+        },
+        "default": {
+          "type": "number"
+        },
+        "min": {
+          "type": "number"
+        },
+        "max": {
+          "type": "number"
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "id",
+        "name",
+        "description",
+        "cssVariable",
+        "default"
+      ],
+      "properties": {
+        "type": {
+          "const": "toggle"
+        },
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "$ref": "#/$defs/name"
+        },
+        "description": {
+          "$ref": "#/$defs/description"
+        },
+        "cssVariable": {
+          "$ref": "#/$defs/cssVariable"
+        },
+        "default": {
+          "type": "boolean"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "cssVariable": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80,
+      "pattern": "^--[a-z][a-z0-9-]*$"
+    }
+  }
+}

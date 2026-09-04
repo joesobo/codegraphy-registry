@@ -17,6 +17,7 @@
     "license",
     "keywords",
     "modes",
+    "settings",
     "preview"
   ],
   "properties": {
@@ -44,6 +45,11 @@
       "maxItems": 2,
       "uniqueItems": true,
       "items": { "enum": ["light", "dark"] }
+    },
+    "settings": {
+      "type": "array",
+      "maxItems": 50,
+      "items": { "$ref": "theme-setting.schema.json" }
     },
     "preview": { "type": "string", "pattern": "^[^/\\\\]+\\.(png|jpe?g|webp)$" }
   },

@@ -6,7 +6,7 @@ import { validateThemeCss } from "./css";
 
 const registryRoot = join(import.meta.dir, "..");
 const schemas = await Promise.all(
-  ["theme-source", "theme-package", "theme-release"].map(async (name) =>
+  ["theme-source", "theme-package", "theme-release", "theme-setting"].map(async (name) =>
     JSON.parse(await readFile(join(registryRoot, `schemas/${name}.schema.json`), "utf8")),
   ),
 );
@@ -27,8 +27,21 @@ interface SourceManifest {
   license: string;
   keywords: string[];
   modes: ("light" | "dark")[];
+  settings: ThemeSetting[];
   preview: string;
 }
+
+type ThemeSetting = {
+  type: "color" | "text" | "number" | "toggle";
+  id: string;
+  name: string;
+  description: string;
+  cssVariable: string;
+  default: string | number | boolean;
+  min?: number;
+  max?: number;
+  step?: number;
+};
 
 interface PackageManifest extends Omit<SourceManifest, "$schema" | "preview"> {
   preview: string;
@@ -68,6 +81,28 @@ function httpsUrl(value: string, label: string): void {
   if (url.protocol !== "https:") throw new Error(`${label} must be an HTTPS URL`);
 }
 
+function validateThemeSettings(settings: ThemeSetting[]): void {
+  const ids = new Set<string>();
+  const variables = new Set<string>();
+  for (const setting of settings) {
+    if (ids.has(setting.id) || variables.has(setting.cssVariable))
+      throw new Error("Theme setting IDs and CSS variables must be unique");
+    ids.add(setting.id);
+    variables.add(setting.cssVariable);
+    if (
+      setting.type === "number" &&
+      (typeof setting.default !== "number" ||
+        typeof setting.min !== "number" ||
+        typeof setting.max !== "number" ||
+        typeof setting.step !== "number" ||
+        setting.min > setting.default ||
+        setting.default > setting.max ||
+        setting.step <= 0)
+    )
+      throw new Error("Theme number settings require min <= default <= max and a positive step");
+  }
+}
+
 export async function buildTheme(
   sourceDirectory: string,
   options: ThemeBuildOptions,
@@ -81,6 +116,7 @@ export async function buildTheme(
     throw new Error("Theme schemas did not load");
   assertValid(validateSource, source, "Theme source manifest");
   httpsUrl(source.repository, "Theme repository");
+  validateThemeSettings(source.settings);
   if (basename(source.preview) !== source.preview)
     throw new Error("Theme preview must name an image in the theme source directory");
 

@@ -33,9 +33,21 @@ The initial registry pull request is the directory review boundary. Later update
 - `minimumCodeGraphyVersion`: the oldest compatible CodeGraphy release in `x.y.z` form. CodeGraphy blocks installation on older versions.
 - `description`, `author`, `repository`, `license`, and `keywords`: details shown or used by the theme directory.
 - `modes`: `light`, `dark`, or both.
+- `settings`: optional theme-specific controls represented by a required array. Use an empty array when the theme has no controls.
 - `preview`: a PNG, JPEG, or WebP filename in the source directory. The builder requires this creator-provided file and embeds it in the package. It does not create or substitute preview artwork.
 
 IDs and keywords use lowercase letters, digits, and hyphens. Each source repository must include its license text. A package contains the validated manifest and CSS only; it has no executable code.
+
+Theme settings write one declared CSS custom property after theme CSS and before personal appearance values and snippets. Their types are:
+
+| Type | Value exposed to CSS |
+| --- | --- |
+| `color` | The selected CSS color string |
+| `text` | The entered string |
+| `number` | A unitless number constrained by `min`, `max`, and `step` |
+| `toggle` | `1` when enabled and `0` when disabled |
+
+Each setting needs a unique `id` and `cssVariable`. CSS variable names start with `--` and contain lowercase letters, digits, and hyphens. Use the variable in `theme.css` with a fallback that matches its default.
 
 ## CSS and assets
 

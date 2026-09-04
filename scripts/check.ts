@@ -4,7 +4,7 @@ import { basename, join } from "node:path";
 import Ajv2020 from "ajv/dist/2020";
 
 const root = join(import.meta.dir, "..");
-const schemaNames = ["theme-source", "theme-package", "theme-release", "registry"];
+const schemaNames = ["theme-source", "theme-package", "theme-release", "registry", "theme-setting"];
 const schemas = await Promise.all(
   schemaNames.map(async (name) =>
     JSON.parse(await readFile(join(root, `schemas/${name}.schema.json`), "utf8")),

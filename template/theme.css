@@ -2,7 +2,7 @@
   --canvas: #f7f7f8;
   --surface: #ffffff;
   --surface-raised: #ffffff;
-  --surface-muted: #eeeef1;
+  --surface-muted: var(--theme-panel-tint, #eeeef1);
   --border: #d8d8de;
   --border-strong: #b7b7c0;
   --text: #25252a;

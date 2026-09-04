@@ -12,5 +12,15 @@
   "license": "MIT",
   "keywords": ["light", "dark"],
   "modes": ["light", "dark"],
+  "settings": [
+    {
+      "type": "color",
+      "id": "panel-tint",
+      "name": "Light panel tint",
+      "description": "Sets the muted panel background in light mode.",
+      "cssVariable": "--theme-panel-tint",
+      "default": "#eeeef1"
+    }
+  ],
   "preview": "preview.png"
 }
