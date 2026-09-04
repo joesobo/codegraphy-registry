@@ -64,3 +64,11 @@ The complete package is limited to 8 MiB, CSS to 4 MiB, and each embedded previe
 Never replace a published package asset. Increase the manifest version, publish a new asset, and regenerate release metadata. CodeGraphy offers an update only when the catalog version is newer and the current app satisfies `minimumCodeGraphyVersion`.
 
 The package and catalog envelope reserve no executable plugin behavior.
+
+## Contributing and maintenance
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for initial submissions, updates, review criteria, and release maintenance. The public tools, schemas, starter, and documentation use the [MIT license](LICENSE); individual themes retain their own licenses.
+
+Only theme packages are supported today. The extension directory can add other package kinds when CodeGraphy supports them, without moving existing theme entries.
+
+The public styling reference includes [color defaults](docs/color-defaults.json) and [token defaults](docs/token-defaults.css). These reference files describe the current CodeGraphy theme contract; theme authors do not need the private application source.

@@ -1,3 +1,5 @@
+import { isDeepStrictEqual } from "node:util";
+import { validateThemeCss } from "./css";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { basename, join } from "node:path";
@@ -23,25 +25,39 @@ for (const reference of registry.extensions) {
   if (reference.kind !== "theme") continue;
   const localPrefix =
     "https://raw.githubusercontent.com/joesobo/codegraphy-registry/main/themes/";
-  if (!reference.releaseUrl.startsWith(localPrefix)) continue;
-  const relativePath = reference.releaseUrl.slice(localPrefix.length);
-  const release = JSON.parse(await readFile(join(root, "themes", relativePath), "utf8"));
+  const local = reference.releaseUrl.startsWith(localPrefix);
+  if (!local && !process.argv.includes("--remote")) {
+    console.log(`Remote validation required: ${reference.id} (run bun run check:remote)`);
+    continue;
+  }
+  const release = JSON.parse(process.argv.includes("--remote")
+    ? (await download(reference.releaseUrl)).toString("utf8")
+    : await readFile(join(root, "themes", reference.releaseUrl.slice(localPrefix.length)), "utf8"));
   const validateRelease = ajv.getSchema(schemas[2].$id);
   if (!validateRelease?.(release))
     throw new Error(`${reference.id} release is invalid: ${ajv.errorsText(validateRelease?.errors)}`);
   if (release.manifest.id !== reference.id)
     throw new Error(`${reference.id} release manifest has a different ID`);
-  const packageBytes = await readFile(join(root, "dist", basename(new URL(release.url).pathname)));
+  const packageBytes = process.argv.includes("--remote")
+    ? await download(release.url)
+    : await readFile(join(root, "dist", basename(new URL(release.url).pathname)));
   const checksum = createHash("sha256").update(packageBytes).digest("hex");
   if (checksum !== release.sha256) throw new Error(`${reference.id} package checksum is stale`);
   const packageValue = JSON.parse(packageBytes.toString("utf8"));
   const validatePackage = ajv.getSchema(schemas[1].$id);
   if (!validatePackage?.(packageValue))
     throw new Error(`${reference.id} package is invalid: ${ajv.errorsText(validatePackage?.errors)}`);
-  if (
-    packageValue.manifest.id !== release.manifest.id ||
-    packageValue.manifest.version !== release.manifest.version
-  )
+  validateThemeCss(packageValue.css);
+  if (!isDeepStrictEqual(packageValue.manifest, release.manifest))
     throw new Error(`${reference.id} package identity does not match its release metadata`);
 }
 console.log(`Validated ${registry.extensions.length} registry entries.`);
+
+async function download(url: string): Promise<Buffer> {
+  if (new URL(url).protocol !== "https:") throw new Error("Public release URLs must use HTTPS");
+  const response = await fetch(url, { signal: AbortSignal.timeout(30000) });
+  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.length > 8 * 1024 * 1024) throw new Error(`${url}: exceeds 8 MiB`);
+  return bytes;
+}

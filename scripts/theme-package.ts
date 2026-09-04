@@ -141,6 +141,12 @@ export async function buildTheme(
   if (!validateSource || !validatePackage || !validateRelease)
     throw new Error("Theme schemas did not load");
   assertValid(validateSource, source, "Theme source manifest");
+  if (source.id === "codegraphy") throw new Error("The bundled CodeGraphy ID is reserved");
+  for (const [key, limit] of Object.entries({ name: 120, author: 200, description: 4000, repository: 500, license: 100 })) {
+    const value = source[key as keyof SourceManifest] as string;
+    if (!value.trim() || Buffer.byteLength(value) > limit)
+      throw new Error(`Theme ${key} must be non-empty and at most ${limit} UTF-8 bytes`);
+  }
   httpsUrl(source.repository, "Theme repository");
   validateThemeSettings(source.settings);
   const previewModes = Object.keys(source.previews).sort();
