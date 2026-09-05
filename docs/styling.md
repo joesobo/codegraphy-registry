@@ -4,7 +4,7 @@ CodeGraphy loads Client CSS through `apps/client/src/styles/index.css`. The entr
 
 ## Cascade layers
 
-For normal declarations, the Client declares these layers from lowest to highest priority. CSS importance and specificity still apply; important declarations reverse layer precedence:
+The Client declares these layers from lowest to highest priority. It removes `!important` flags from theme and snippet declarations before applying them, so importance cannot reverse this order. Stored CSS remains unchanged. Specificity still applies within each layer:
 
 | Layer | Owner |
 | --- | --- |

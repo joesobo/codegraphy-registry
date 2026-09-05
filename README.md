@@ -52,7 +52,7 @@ Each setting needs a unique `id` and `cssVariable`. CSS variable names start wit
 
 ## CSS and assets
 
-Write ordinary CSS without a cascade-layer wrapper. Use `:root[data-color-scheme="light"]` and `:root[data-color-scheme="dark"]` for mode-specific values. Personal font, accent, and text-size choices apply after the theme. Enabled CSS snippets apply after personal choices in saved order.
+Write ordinary CSS without a cascade-layer wrapper. Use `:root[data-color-scheme="light"]` and `:root[data-color-scheme="dark"]` for mode-specific values. Personal font, accent, and text-size choices apply after the theme. Enabled CSS snippets apply after personal choices in saved order. CodeGraphy removes `!important` flags from theme and snippet declarations during rendering so they cannot reverse this order; stored CSS remains unchanged.
 
 CSS may change any app layout or hide content. CodeGraphy does not enforce design quality. Imports and remote resource URLs are rejected. Embed image and font resources as base64 data URLs so the package remains self-contained and works offline.
 
