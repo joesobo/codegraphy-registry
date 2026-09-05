@@ -20,9 +20,11 @@ if (!validateRegistry?.(registry))
   throw new Error(`Registry is invalid: ${ajv.errorsText(validateRegistry?.errors)}`);
 const ids = new Set<string>();
 for (const reference of registry.extensions) {
-  if (ids.has(reference.id)) throw new Error(`Duplicate registry ID: ${reference.id}`);
-  ids.add(reference.id);
-  if (reference.kind !== "theme") continue;
+  const identity = `${reference.kind}/${reference.id}`;
+  if (ids.has(identity)) throw new Error(`Duplicate registry entry: ${identity}`);
+  ids.add(identity);
+  if (reference.kind !== "theme")
+    throw new Error(`Unsupported package kind: ${reference.kind}. Add its validator before publishing entries.`);
   const localPrefix =
     "https://raw.githubusercontent.com/joesobo/codegraphy-registry/main/themes/";
   const local = reference.releaseUrl.startsWith(localPrefix);

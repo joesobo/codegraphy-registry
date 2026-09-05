@@ -8,7 +8,7 @@ For a theme, you need a public theme repository and public release downloads. Yo
 
 1. Build the package and publish it as an immutable release asset in your repository.
 2. Commit its generated release metadata at a stable raw HTTPS URL.
-3. Fork this registry. Add one entry to `index.json` with `kind: "theme"`, your unique `id`, and `releaseUrl`. Keep theme source and assets in your own repository.
+3. Fork this registry. Add one entry to `index.json` with `kind: "theme"`, your `id` (unique within `kind: "theme"`), and `releaseUrl`. Keep theme source and assets in your own repository.
 4. Run `bun install --frozen-lockfile`, `bun run check`, and `bun run check:remote`. The remote check downloads the public metadata and packages, then verifies their schemas, identity, CSS, and SHA-256.
 5. Open a pull request with your repository, release URL, screenshots, and the CodeGraphy version and platforms you tested.
 
@@ -24,4 +24,4 @@ Run `bun run build` after changing the bundled example theme sources. Review and
 
 The repository license covers the public tools, schemas, starter, and documentation. Each theme keeps its own license in `themes/<id>/LICENSE`.
 
-The directory uses an extension envelope so new package kinds can be added later. Only themes are currently supported. Submit plugin support as a separate proposal before adding plugin entries.
+See [registry structure and ownership](README.md#registry-structure-and-ownership) and [adding plugins](README.md#adding-plugins-and-growing-the-directory) for identity, validation, and package-kind rules. Unsupported kinds fail publication checks until their validation and app support exist.

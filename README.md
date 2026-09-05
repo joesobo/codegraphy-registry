@@ -58,13 +58,39 @@ CSS may change any app layout or hide content. CodeGraphy does not enforce desig
 
 The complete package is limited to 8 MiB, CSS to 4 MiB, and each embedded preview data URL to 2 MiB. Maintained themes should keep text readable, keyboard focus visible, enlarged text usable, and reduced-motion behavior available.
 
-## Registry and updates
+## Registry structure and ownership
 
-`index.json` uses [schemas/registry.schema.json](schemas/registry.schema.json). A theme reference contains `kind`, `id`, and `releaseUrl`. CodeGraphy fetches that stable URL to get the current [release metadata](schemas/theme-release.schema.json), then verifies the downloaded package SHA-256 and manifest identity before installation.
+`index.json` is a small directory of pointers. It uses [schemas/registry.schema.json](schemas/registry.schema.json).
 
-Never replace a published package asset. Increase the manifest version, publish a new asset, and regenerate release metadata. CodeGraphy offers an update only when the catalog version is newer and the current app satisfies `minimumCodeGraphyVersion`.
+| Owner | Stores |
+| --- | --- |
+| Registry | Package kind, stable ID, and author-owned release URL |
+| Author repository | Source, license, previews, current release metadata, and immutable package assets |
+| CodeGraphy | Installation, compatibility checks, activation, updates, and local storage |
 
-Plugin execution, permissions, and package validation will be defined with plugin support. The registry does not implement a plugin runtime.
+An entry is identified by `(kind, id)`. IDs are unique within each kind. A future plugin and a theme can use the same ID. Keep both fields stable; do not reuse a removed identity for an unrelated package. Changes to ownership or the release URL require registry review.
+
+The maintained sources under `themes/` are first-party examples. Outside authors keep their packages in their own repositories. Generated packages belong in release assets, not in this Git repository or the application install.
+
+## Releases and updates
+
+CodeGraphy fetches the stable `releaseUrl` to get the current [theme release metadata](schemas/theme-release.schema.json), then verifies the package SHA-256 and complete manifest before installation. Never replace a published package asset. Increase the manifest version, publish a new asset, and regenerate release metadata. Updates do not require another registry pull request or application release.
+
+The directory's `formatVersion` describes its structure. Each package kind defines its own release and package format versions. A theme's `minimumCodeGraphyVersion` controls app compatibility; the catalog version does not. The app offers an update only when the package is newer and compatible.
+
+Initial listing review does not review every later release. The checksum detects changed bytes relative to the author's metadata; it does not prove that an author or update is trustworthy. Removing a directory entry stops discovery but does not uninstall existing copies.
+
+## Adding plugins and growing the directory
+
+Themes are the only installable kind today. Clients ignore kinds they do not support. The publishing check rejects unsupported kinds so an entry cannot pass without package validation.
+
+When plugin support is implemented:
+
+1. Define its manifest, release format, compatibility rules, permissions, and runtime lifecycle in CodeGraphy.
+2. Add its public schemas, author guide, starter, and package validator here. Keep theme-specific fields such as CSS modes out of the shared directory entry.
+3. Add plugin entries with `kind: "plugin"` to the same index after the installer and validation work end to end.
+
+The registry remains a static directory. It needs no accounts, database, or plugin execution service. Core currently resolves theme feeds in batches of four, reports individual feed failures, and bounds each download by size and timeout. Installed packages remain usable without the registry. Browsing still resolves every theme feed; there is no catalog cache or pagination today. Measure catalog size and browse latency before adding caching, a generated search index, or a CDN.
 
 ## Contributing and maintenance
 
