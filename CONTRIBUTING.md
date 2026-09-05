@@ -1,6 +1,8 @@
-# Contribute a theme
+# Contribute an extension
 
-You need a public theme repository and public release downloads. You do not need access to the CodeGraphy application repository. Follow the [author guide](README.md#create-a-theme) and use the [starter](template/).
+Themes are the first supported extension kind. Plugin submission rules will be added with plugin support.
+
+For a theme, you need a public theme repository and public release downloads. You do not need access to the CodeGraphy application repository. Follow the [author guide](README.md#create-a-theme) and use the [starter](template/).
 
 ## Submit the first release
 

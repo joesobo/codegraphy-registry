@@ -1,6 +1,8 @@
-# CodeGraphy theme registry
+# CodeGraphy extension registry
 
-This public registry lists optional CodeGraphy themes. CodeGraphy includes its default theme. It downloads another theme only when a user installs it, and installation does not activate the theme.
+This public registry is the directory for CodeGraphy extensions: themes today and plugins when plugin support is available. The shared `index.json` identifies each entry by `kind`, `id`, and its author-owned `releaseUrl`. Each package kind has its own format and validation rules.
+
+CodeGraphy includes its default theme. It downloads another theme only when a user installs it, and installation does not activate the theme.
 
 Theme authors keep source and releases in their own public repository. The registry records one stable release-metadata URL for each theme. An author changes that metadata when they publish a new immutable package, so updates do not require a CodeGraphy application change or another registry pull request.
 
@@ -62,12 +64,10 @@ The complete package is limited to 8 MiB, CSS to 4 MiB, and each embedded previe
 
 Never replace a published package asset. Increase the manifest version, publish a new asset, and regenerate release metadata. CodeGraphy offers an update only when the catalog version is newer and the current app satisfies `minimumCodeGraphyVersion`.
 
-The package and catalog envelope reserve no executable plugin behavior.
+Plugin execution, permissions, and package validation will be defined with plugin support. The registry does not implement a plugin runtime.
 
 ## Contributing and maintenance
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for initial submissions, updates, review criteria, and release maintenance. The public tools, schemas, starter, and documentation use the [MIT license](LICENSE); individual themes retain their own licenses.
-
-Only theme packages are supported today. The extension directory can add other package kinds when CodeGraphy supports them, without moving existing theme entries.
 
 The public styling reference includes [color defaults](docs/color-defaults.json) and [token defaults](docs/token-defaults.css). These reference files describe the current CodeGraphy theme contract; theme authors do not need the private application source.
